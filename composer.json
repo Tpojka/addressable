@@ -1,0 +1,28 @@
+{
+    "name": "tpojka/polyloc",
+    "description": "Laravel package that contains polymorphic location tables such are addresses and phones.",
+    "type": "library",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Goran Grbic",
+            "email": "tpojka@gmail.com"
+        }
+    ],
+    "require": {
+        "giggsey/libphonenumber-for-php": "^8.11",
+        "nesbot/carbon": "^2.16"
+    },
+    "autoload": {
+        "psr-4": {
+            "Tpojka\\Polyloc\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Tpojka\\Polyloc\\PolylocServiceProvider"
+            ]
+        }
+    }
+}
