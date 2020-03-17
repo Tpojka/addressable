@@ -5,7 +5,7 @@ use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Schema;
 
-class TpojkaPolylocCreateAddressesTable extends Migration
+class CreateAddressesTableTpojkaPolyloc extends Migration
 {
     /**
      * Run the migrations.

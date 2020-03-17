@@ -16,7 +16,7 @@ use Illuminate\Support\ServiceProvider;
 class PolylocServiceProvider extends ServiceProvider
 {
     private CONST STUB_DIR = '/../stub/';
-    private CONST MIGRATION_BASENAME_STUB = 'tpojka_polyloc_create_addresses_table.php';
+    private CONST MIGRATION_BASENAME_STUB = 'create_addresses_table_tpojka_polyloc.php';
     private CONST LARAVEL_MIGRATIONS_LOCATION = '/../../../../database/migrations/';
 
     public function register()
