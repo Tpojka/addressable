@@ -13,7 +13,7 @@ use DirectoryIterator;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\ServiceProvider;
 
-class AddressableServiceProvider extends ServiceProvider
+class PolylocServiceProvider extends ServiceProvider
 {
     private CONST STUB_DIR = '/../stub/';
     private CONST MIGRATION_BASENAME_STUB = 'create_addresses_table.php';
