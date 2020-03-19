@@ -76,7 +76,10 @@ class PolylocServiceProvider extends ServiceProvider
                 return true;
             }
 
-            return (substr($fileInfo->getFilename(), -$length) === self::MIGRATION_BASENAME_STUB);
+            if (substr($fileInfo->getFilename(), -$length) === self::MIGRATION_BASENAME_STUB) {
+                return true;
+            }
         }
+        return false;
     }
 }
