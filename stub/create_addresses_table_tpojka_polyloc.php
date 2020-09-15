@@ -33,14 +33,14 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
 
         Schema::create('geo_locations', function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->geometry('geometry', 4326)->nullable();
-            $table->point('point', 4326)->nullable();
-            $table->lineString('line_string', 4326)->nullable();
-            $table->polygon('polygon', 4326)->nullable();
-            $table->multiPoint('multi_point', 4326)->nullable();
-            $table->multiLineString('multi_line_string', 4326)->nullable();
-            $table->multiPolygon('multi_polygon', 4326)->nullable();
-            $table->geometryCollection('geometry_collection', 4326)->nullable();
+            $table->geometry('geometry')->nullable();
+            $table->point('point')->nullable();
+            $table->lineString('line_string')->nullable();
+            $table->polygon('polygon')->nullable();
+            $table->multiPoint('multi_point')->nullable();
+            $table->multiLineString('multi_line_string')->nullable();
+            $table->multiPolygon('multi_polygon')->nullable();
+            $table->geometryCollection('geometry_collection')->nullable();
             $table->timestamps();
             $table->softDeletes();
 
