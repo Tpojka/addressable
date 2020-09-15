@@ -10,7 +10,8 @@
         }
     ],
     "require": {
-        "giggsey/libphonenumber-for-php": "^8.11",
+        "propaganistas/laravel-phone":  "4.2.5",
+        "grimzy/laravel-mysql-spatial": "*",
         "nesbot/carbon": "^2.16"
     },
     "autoload": {

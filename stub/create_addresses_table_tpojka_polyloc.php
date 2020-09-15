@@ -15,7 +15,7 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
     public function up()
     {
         // If some of these tables exist - do not execute
-        if (Schema::hasTable('countries') || Schema::hasTable('addresses') || Schema::hasTable('phones')) {
+        if (Schema::hasTable('geo_locations') || Schema::hasTable('countries') || Schema::hasTable('addresses') || Schema::hasTable('phones')) {
             Log::debug('Some of intended tables {countries or addresses or phones} already exist which collides with this package concept.');
             return;
         }
@@ -31,10 +31,28 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
             $table->softDeletes();
         });
 
+        Schema::create('geo_locations', function (Blueprint $table) {
+            $table->bigIncrements('id');
+            $table->geometry('geometry', 4326)->nullable();
+            $table->point('point', 4326)->nullable();
+            $table->lineString('line_string', 4326)->nullable();
+            $table->polygon('polygon', 4326)->nullable();
+            $table->multiPoint('multi_point', 4326)->nullable();
+            $table->multiLineString('multi_line_string', 4326)->nullable();
+            $table->multiPolygon('multi_polygon', 4326)->nullable();
+            $table->geometryCollection('geometry_collection', 4326)->nullable();
+            $table->timestamps();
+            $table->softDeletes();
+
+            $table->spatialIndex('point');
+        });
+
         Schema::create('addresses', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->morphs('addressable');
+            $table->string('label');
             $table->unsignedBigInteger('country_id');
+            $table->unsignedBigInteger('geo_location_id');
             $table->string('line_1');
             $table->string('line_2')->nullable();
             $table->string('post_code');
@@ -42,21 +60,34 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
             $table->timestamps();
             $table->softDeletes();
 
+            $table->unique(['addressable_id', 'addressable_type', 'label'], 'unique_address_label');
+
             $table
                 ->foreign('country_id')
                 ->references('id')
                 ->on('countries')
                 ->onUpdate('CASCADE')
-                ->onDelete('CASCADE');
+                ->onDelete('SET NULL');
+
+            $table
+                ->foreign('geo_location_id')
+                ->references('id')
+                ->on('geo_locations')
+                ->onUpdate('CASCADE')
+                ->onDelete('SET NULL');
         });
 
         Schema::create('phones', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->morphs('phoneable');
+            $table->string('label');
             $table->string('phone_number');
-            $table->tinyInteger('default')->default(0);
+            $table->unsignedTinyInteger('phone_number_type')->default(10);
+            $table->unsignedTinyInteger('default')->default(0);
             $table->timestamps();
             $table->softDeletes();
+
+            $table->unique(['phoneable_id', 'phoneable_type', 'label'], 'unique_phone_label');
         });
 
         $this->seedCountries();
@@ -70,13 +101,23 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
+        Schema::table('phones', function (Blueprint $table) {
+            $table->dropUnique('unique_phone_label');
+        });
         Schema::dropIfExists('phones');
 
         Schema::table('addresses', function (Blueprint $table) {
+            $table->dropForeign(['geo_location_id']);
             $table->dropForeign(['country_id']);
+            $table->dropUnique('unique_address_label');
         });
         Schema::dropIfExists('addresses');
 
+        Schema::table('geo_locations', function (Blueprint $table) {
+            $table->dropSpatialIndex(['point']);
+        });
+
+        Schema::dropIfExists('geo_locations');
         Schema::dropIfExists('countries');
         Schema::enableForeignKeyConstraints();
     }
