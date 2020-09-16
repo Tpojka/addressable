@@ -2,4 +2,4 @@
 Base point for polymorphic addresses table/entity. 
 In dev phase still.
 
-`composer require tpojka/polyloc:v0.57.1`
+`composer require tpojka/polyloc:v0.57.2`
