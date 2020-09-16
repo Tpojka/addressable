@@ -33,6 +33,7 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
 
         Schema::create('geo_locations', function (Blueprint $table) {
             $table->bigIncrements('id');
+            $table->morphs('geo_locationable');
             $table->geometry('geometry')->nullable();
             $table->point('point')->nullable();
             $table->lineString('line_string')->nullable();
@@ -50,7 +51,6 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
             $table->morphs('addressable');
             $table->string('label');
             $table->unsignedBigInteger('country_id');
-            $table->unsignedBigInteger('geo_location_id')->nullable();
             $table->string('line_1');
             $table->string('line_2')->nullable();
             $table->string('post_code');
@@ -66,13 +66,6 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
                 ->on('countries')
                 ->onUpdate('CASCADE')
                 ->onDelete('CASCADE');
-
-            $table
-                ->foreign('geo_location_id')
-                ->references('id')
-                ->on('geo_locations')
-                ->onUpdate('CASCADE')
-                ->onDelete('SET NULL');
         });
 
         Schema::create('phones', function (Blueprint $table) {
@@ -105,7 +98,6 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
         Schema::dropIfExists('phones');
 
         Schema::table('addresses', function (Blueprint $table) {
-            $table->dropForeign(['geo_location_id']);
             $table->dropForeign(['country_id']);
             $table->dropUnique('unique_address_label');
         });
