@@ -43,8 +43,6 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
             $table->geometryCollection('geometry_collection')->nullable();
             $table->timestamps();
             $table->softDeletes();
-
-            $table->spatialIndex('point');
         });
 
         Schema::create('addresses', function (Blueprint $table) {
@@ -52,7 +50,7 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
             $table->morphs('addressable');
             $table->string('label');
             $table->unsignedBigInteger('country_id');
-            $table->unsignedBigInteger('geo_location_id');
+            $table->unsignedBigInteger('geo_location_id')->nullable();
             $table->string('line_1');
             $table->string('line_2')->nullable();
             $table->string('post_code');
@@ -67,7 +65,7 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
                 ->references('id')
                 ->on('countries')
                 ->onUpdate('CASCADE')
-                ->onDelete('SET NULL');
+                ->onDelete('CASCADE');
 
             $table
                 ->foreign('geo_location_id')
@@ -112,10 +110,6 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
             $table->dropUnique('unique_address_label');
         });
         Schema::dropIfExists('addresses');
-
-        Schema::table('geo_locations', function (Blueprint $table) {
-            $table->dropSpatialIndex(['point']);
-        });
 
         Schema::dropIfExists('geo_locations');
         Schema::dropIfExists('countries');
