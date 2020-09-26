@@ -84,6 +84,7 @@ class CreateAddressesTableTpojkaPolyloc extends Migration
         });
 
         Schema::create('phoneables', function (Blueprint $table) {
+            $table->id();
             $table->unsignedBigInteger('phone_id');
             $table->unsignedBigInteger('phoneable_id');
             $table->string('phoneable_type');
